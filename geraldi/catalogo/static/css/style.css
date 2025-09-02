@@ -81,8 +81,9 @@ h3 {
    Cabeçalho e Navegação
 ================================ */
 .main-header {
+    height: 150px;
     background-color: var(--primary-color);
-    padding: 10px 20px;
+    padding: 10px 20px; /* Reduzindo o padding para deixar o cabeçalho mais fino */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -90,10 +91,11 @@ h3 {
 
 .logo-link {
     text-decoration: none;
+    line-height: 0;
 }
 
 .logo {
-    max-width: 200px;
+    max-width: 350px
     height: auto;
     border-radius: 20px;
 }
@@ -668,6 +670,10 @@ footer p {
    Responsividade - CORRIGIDA
 ================================ */
 @media (max-width: 768px) {
+        /* Regras para garantir que o header e o footer ocupem 100% */
+    .main-header, footer, .banner-promocional {
+        width: 100%;
+    }
     /* CORREÇÃO PRINCIPAL: Dropdown em mobile */
     .dropdown {
         position: static; /* Remove posicionamento absoluto */
@@ -858,4 +864,10 @@ footer p {
 .contato-link img {
     width: 25px;
     height: 25px;
+}
+/* --- Estilos para o Indicador de Categoria Ativa --- */
+.active-category {
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo branco semi-transparente */
+    border-radius: 5px;
+    padding: 5px 10px;
 }

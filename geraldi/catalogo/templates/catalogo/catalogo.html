@@ -19,11 +19,11 @@
         <nav class="main-nav">
             <ul>
                 <li class="dropdown">
-                    <a href="{% url 'catalogo' %}" class="dropdown-btn">Catálogo</a>
+                    <a href="{% url 'catalogo' %}" class="dropdown-btn {% if not categoria_selecionada %}active-category{% endif %}">Catálogo</a>
                     <ul class="dropdown-content">
                         <li><a href="{% url 'catalogo' %}">Todos os Produtos</a></li>
                         {% for categoria in categorias %}
-                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}">{{ categoria.nome }}</a></li>
+                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}" {% if categoria_selecionada.id == categoria.id %}class="active-category"{% endif %}>{{ categoria.nome }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
