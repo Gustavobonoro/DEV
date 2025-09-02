@@ -46,6 +46,11 @@
                     </div>
                     <button class="carousel-button prev">&leftarrow;</button>
                     <button class="carousel-button next">&rightarrow;</button>
+                    <div class="carousel-indicators">
+                        {% for imagem in imagens %}
+                            <span class="dot {% if forloop.first %}active{% endif %}"></span>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <div class="informacoes">

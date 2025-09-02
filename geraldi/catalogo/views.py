@@ -1,48 +1,45 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Produto, Categoria, ImagemProduto # Importe o modelo ImagemProduto
+from .models import Produto, Categoria, ImagemProduto, Banner
 
 def catalogo_view(request):
-    # Pega todas as categorias do banco de dados
     categorias = Categoria.objects.all()
-
-    # Cria um dicionário para enviar as categorias e seus produtos para o template
+    banners = Banner.objects.all()
     contexto = {
-        'categorias': categorias
+        'categorias': categorias,
+        'banners': banners
     }
-
-    # Renderiza o template HTML e passa os dados para ele
     return render(request, 'catalogo/catalogo.html', contexto)
 
 def catalogo_filtrado_view(request, categoria_id):
     categoria = get_object_or_404(Categoria, pk=categoria_id)
     produtos = Produto.objects.filter(categoria=categoria)
     categorias = Categoria.objects.all()
-
+    banners = Banner.objects.all()
     contexto = {
         'categoria_selecionada': categoria,
         'produtos': produtos,
-        'categorias': categorias
+        'categorias': categorias,
+        'banners': banners
     }
     return render(request, 'catalogo/catalogo.html', contexto)
 
 def produto_detalhe_view(request, produto_id):
-    # Pega um produto específico por seu ID, ou retorna erro 404 se não existir
     produto = get_object_or_404(Produto, pk=produto_id)
-    
-    # Pega todas as imagens relacionadas a este produto
     imagens = ImagemProduto.objects.filter(produto=produto)
-
-    # Cria o dicionário com os dados do produto e suas imagens
+    categorias = Categoria.objects.all()
     contexto = {
         'produto': produto,
-        'imagens': imagens
+        'imagens': imagens,
+        'categorias': categorias
     }
-    
-    # Renderiza o novo template de detalhes do produto
     return render(request, 'catalogo/produto_detalhe.html', contexto)
-    
+
 def sobre_view(request):
-    return render(request, 'catalogo/sobre.html')
+    categorias = Categoria.objects.all()
+    contexto = {'categorias': categorias}
+    return render(request, 'catalogo/sobre.html', contexto)
 
 def contato_view(request):
-    return render(request, 'catalogo/contato.html')
+    categorias = Categoria.objects.all()
+    contexto = {'categorias': categorias}
+    return render(request, 'catalogo/contato.html', contexto)

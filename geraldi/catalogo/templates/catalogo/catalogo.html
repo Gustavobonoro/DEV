@@ -33,13 +33,22 @@
         </nav>
     </header>
 
-    <section class="banner-promocional">
-        <div class="banner-carousel">
-            <img src="{% static 'img/banner1.png' %}" alt="Promoção 1" class="carousel-img active">
-            <img src="{% static 'img/banner2.png' %}" alt="Promoção 2" class="carousel-img">
-            <img src="{% static 'img/banner3.png' %}" alt="Promoção 3" class="carousel-img">
+  <section class="banner-promocional">
+    <div class="banner-carousel">
+        {% for banner in banners %}
+            <img src="{{ banner.imagem.url }}" alt="{{ banner.titulo }}" class="carousel-img {% if forloop.first %}active{% endif %}">
+        {% endfor %}
+
+        <button class="carousel-nav-btn prev">&leftarrow;</button>
+        <button class="carousel-nav-btn next">&rightarrow;</button>
+        
+        <div class="carousel-indicators">
+            {% for banner in banners %}
+                <span class="dot {% if forloop.first %}active{% endif %}"></span>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="texto-produtos">
         <h2>Nossa Coleção</h2>

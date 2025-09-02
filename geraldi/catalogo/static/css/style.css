@@ -149,9 +149,7 @@ h3 {
     margin-top: 5px;
     pointer-events: none;
     transition: opacity 0.3s ease;
-    display: flex;          /* ADICIONADO */
-    flex-direction: column; /* FORÇA COLUNA */
-    gap: 0;                 /* REMOVE ESPAÇO ENTRE ITENS */
+    display: block; /* **PRINCIPAL MUDANÇA: Faz o menu aparecer em um bloco** */
 }
 
 .dropdown-content li {
@@ -464,11 +462,32 @@ footer p {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    max-width: 95%;
-    max-height: 95%;
-    overflow: hidden;
+    max-width: 90vw; /* Ajusta a largura máxima para 90% da largura da viewport */
+    max-height: 90vh; /* Ajusta a altura máxima para 90% da altura da viewport */
+    overflow: auto; /* Adiciona barra de rolagem se a imagem for maior */
+    text-align: center; /* Centraliza a imagem dentro do container */
 }
 
+#imagem-expandida {
+    max-width: 100%; /* Garante que a imagem não ultrapasse a largura do container */
+    max-height: 100%; /* Garante que a imagem não ultrapasse a altura do container */
+    object-fit: contain; /* Redimensiona a imagem para caber sem cortar */
+}
+
+#fechar-imagem {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: var(--accent-color);
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001; /* Garante que o botão de fechar fique acima da imagem */
+}
+
+#fechar-imagem:hover {
+    color: var(--primary-color);
+}
 /* ================================
    Banner Promocional
 ================================ */
@@ -498,6 +517,79 @@ footer p {
 }
 
 .carousel-img.active {
+    opacity: 1;
+}
+/* --- Estilos do Carrossel de Banner --- */
+.banner-promocional {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.banner-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-img.active {
+    opacity: 1;
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+}
+
+.carousel-nav-btn.prev {
+    left: 10px;
+}
+
+.carousel-nav-btn.next {
+    right: 10px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.dot.active {
     opacity: 1;
 }
 
@@ -537,17 +629,20 @@ footer p {
     left: 0;
     background-color: var(--primary-color);
     min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     border-radius: 5px;
     padding: 10px 0;
     margin-top: 5px;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    display: flex; /* Adiciona o display flex */
+    flex-direction: column; /* Faz os itens se empilharem */
 }
 
 .dropdown-content li {
     padding: 0;
+    width: 100%; /* Garante que os itens ocupem toda a largura */
 }
 
 .dropdown-content a {

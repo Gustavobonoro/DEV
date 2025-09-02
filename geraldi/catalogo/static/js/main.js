@@ -15,21 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Lógica do Carrossel de Imagens ---
+    // --- Lógica do Carrossel de Imagens do Produto (na página de detalhes) ---
     const carouselContainer = document.querySelector('.carousel-container');
     if (carouselContainer) {
         const images = document.querySelectorAll('.carousel-image');
+        const dots = document.querySelectorAll('.carousel-indicators .dot');
         const prevButton = document.querySelector('.carousel-button.prev');
         const nextButton = document.querySelector('.carousel-button.next');
         let currentIndex = 0;
 
         const showImage = (index) => {
             images.forEach(img => img.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
             images[index].classList.add('active');
+            dots[index].classList.add('active');
         };
 
         // Garante que a primeira imagem está ativa ao carregar
-        images[0].classList.add('active');
+        showImage(currentIndex);
 
         prevButton.addEventListener('click', () => {
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
@@ -41,19 +44,27 @@ document.addEventListener('DOMContentLoaded', () => {
             showImage(currentIndex);
         });
         
+        if (dots) {
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    showImage(currentIndex);
+                });
+            });
+        }
+
         // Lógica para expandir a imagem ao clicar
         const overlay = document.getElementById('overlay');
         const imagemExpandidaContainer = document.getElementById('imagem-expandida-container');
         const imagemExpandida = document.getElementById('imagem-expandida');
         const fecharImagem = document.getElementById('fechar-imagem');
 
-        // 🔥 Correção: evento individual em cada imagem
-        images.forEach(img => {
-            img.addEventListener('click', () => {
-                imagemExpandida.src = img.src;
+        carouselContainer.addEventListener('click', (event) => {
+            if (event.target.tagName === 'IMG') {
+                imagemExpandida.src = event.target.src;
                 overlay.style.display = 'block';
                 imagemExpandidaContainer.style.display = 'block';
-            });
+            }
         });
 
         if (fecharImagem) {
@@ -102,22 +113,71 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open(url, '_blank');
         });
     }
+    
+    // --- Lógica do Carrossel Automático de Banner ---
+    const bannerCarousel = document.querySelector('.banner-carousel');
+    if (bannerCarousel) {
+        const bannerImages = document.querySelectorAll('.banner-carousel .carousel-img');
+        const dots = document.querySelectorAll('.carousel-indicators .dot');
+        const prevBtn = document.querySelector('.carousel-nav-btn.prev');
+        const nextBtn = document.querySelector('.carousel-nav-btn.next');
+        let currentBannerIndex = 0;
+        let bannerInterval;
+
+        const showBanner = (index) => {
+            bannerImages.forEach(img => img.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            bannerImages[index].classList.add('active');
+            dots[index].classList.add('active');
+        };
+
+        const nextBanner = () => {
+            currentBannerIndex = (currentBannerIndex + 1) % bannerImages.length;
+            showBanner(currentBannerIndex);
+        };
+
+        const startBannerCarousel = () => {
+            bannerInterval = setInterval(nextBanner, 5000);
+        };
+
+        const stopBannerCarousel = () => {
+            clearInterval(bannerInterval);
+        };
+
+        // Garante que o carrossel inicia somente se houver imagens
+        if (bannerImages.length > 0) {
+            startBannerCarousel();
+            showBanner(currentBannerIndex);
+        }
+
+        bannerCarousel.addEventListener('mouseover', stopBannerCarousel);
+        bannerCarousel.addEventListener('mouseout', startBannerCarousel);
+
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => {
+                stopBannerCarousel();
+                currentBannerIndex = (currentBannerIndex > 0) ? currentBannerIndex - 1 : bannerImages.length - 1;
+                showBanner(currentBannerIndex);
+                startBannerCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                stopBannerCarousel();
+                currentBannerIndex = (currentBannerIndex + 1) % bannerImages.length;
+                showBanner(currentBannerIndex);
+                startBannerCarousel();
+            });
+        }
+
+        if (dots) {
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    stopBannerCarousel();
+                    currentBannerIndex = index;
+                    showBanner(currentBannerIndex);
+                    startBannerCarousel();
+                });
+            });
+        }
+    }
 });
-
-// --- Lógica do Carrossel Automático de Banner ---
-const bannerImages = document.querySelectorAll('.banner-carousel .carousel-img');
-let currentBannerIndex = 0;
-
-function nextBanner() {
-    // Remove a classe 'active' da imagem atual
-    bannerImages[currentBannerIndex].classList.remove('active');
-    
-    // Calcula o próximo índice
-    currentBannerIndex = (currentBannerIndex + 1) % bannerImages.length;
-    
-    // Adiciona a classe 'active' na próxima imagem
-    bannerImages[currentBannerIndex].classList.add('active');
-}
-
-// Inicia o carrossel para mudar a imagem a cada 5 segundos
-setInterval(nextBanner, 5000);

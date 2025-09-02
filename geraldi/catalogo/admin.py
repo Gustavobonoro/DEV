@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categoria, Produto, ImagemProduto # Importe o novo modelo
+from .models import Categoria, Produto, ImagemProduto, Banner # Importe o novo modelo
 
 # Esta classe cria uma interface para adicionar imagens
 # diretamente na página de cada produto no admin
@@ -17,3 +17,4 @@ class ProdutoAdmin(admin.ModelAdmin):
 
 admin.site.register(Categoria)
 admin.site.register(Produto, ProdutoAdmin)
+admin.site.register(Banner) # **Esta linha é crucial**
