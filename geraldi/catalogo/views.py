@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from .models import Produto, Categoria, ImagemProduto, Banner
 
 def catalogo_view(request):
@@ -43,3 +44,20 @@ def contato_view(request):
     categorias = Categoria.objects.all()
     contexto = {'categorias': categorias}
     return render(request, 'catalogo/contato.html', contexto)
+
+def search_products(request):
+    query = request.GET.get('q', '')
+    if len(query) > 2:
+        produtos = Produto.objects.filter(nome__icontains=query) | \
+                   Produto.objects.filter(descricao__icontains=query)
+        
+        results = []
+        for produto in produtos:
+            results.append({
+                'nome': produto.nome,
+                'url': f'/catalogo/produto/{produto.id}/',
+                'imagem_url': produto.imagemproduto_set.first().imagem.url if produto.imagemproduto_set.exists() else ''
+            })
+        return JsonResponse(results, safe=False)
+    
+    return JsonResponse([], safe=False)

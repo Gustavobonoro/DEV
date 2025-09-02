@@ -181,3 +181,77 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+// Dropdown mobile toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.querySelector('.dropdown-btn');
+    
+    if (dropdownBtn) {
+        dropdownBtn.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const dropdownContent = this.nextElementSibling;
+                const isVisible = dropdownContent.style.display === 'block';
+                
+                // Fecha todos os dropdowns
+                document.querySelectorAll('.dropdown-content').forEach(item => {
+                    item.style.display = 'none';
+                });
+                
+                // Abre/fecha o atual
+                dropdownContent.style.display = isVisible ? 'none' : 'block';
+            }
+        });
+        
+        // Fecha dropdown ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && !e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-content').forEach(item => {
+                    item.style.display = 'none';
+                });
+            }
+        });
+    }
+});
+// --- Lógica da Barra de Busca ---
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+if (searchInput && searchResults) {
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value;
+        if (query.length > 2) {
+            // Requisição AJAX para o backend do Django
+            fetch(`/catalogo/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchResults.innerHTML = ''; // Limpa resultados anteriores
+                    if (data.length > 0) {
+                        data.forEach(produto => {
+                            const resultItem = document.createElement('a');
+                            resultItem.href = produto.url;
+                            resultItem.className = 'search-result-item';
+                            resultItem.innerHTML = `
+                                <img src="${produto.imagem_url}" alt="${produto.nome}">
+                                <span>${produto.nome}</span>
+                            `;
+                            searchResults.appendChild(resultItem);
+                        });
+                        searchResults.style.display = 'block';
+                    } else {
+                        searchResults.innerHTML = '<p class="no-results">Nenhum produto encontrado.</p>';
+                        searchResults.style.display = 'block';
+                    }
+                });
+        } else {
+            searchResults.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
+}

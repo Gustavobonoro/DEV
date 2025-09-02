@@ -81,7 +81,7 @@ h3 {
    Cabeçalho e Navegação
 ================================ */
 .main-header {
-    height: 150px;
+    height: 100px;
     background-color: var(--primary-color);
     padding: 10px 20px; /* Reduzindo o padding para deixar o cabeçalho mais fino */
     display: flex;
@@ -95,7 +95,7 @@ h3 {
 }
 
 .logo {
-    max-width: 350px
+    max-width: 350px;
     height: auto;
     border-radius: 20px;
 }
@@ -804,6 +804,24 @@ footer p {
         padding: 0 15px;
         box-sizing: border-box;
     }
+    @media (max-width: 768px) {
+    .dropdown-content {
+        display: none;
+        position: static;
+        width: 100%;
+        box-shadow: none;
+    }
+    
+    .dropdown-content.show {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        text-align: center;
+        padding: 12px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+}
 }
 
 /* Adiciona uma media query extra para telas muito pequenas */
@@ -870,4 +888,134 @@ footer p {
     background-color: rgba(255, 255, 255, 0.2); /* Fundo branco semi-transparente */
     border-radius: 5px;
     padding: 5px 10px;
+}
+/* --- Estilos da Galeria de Imagens na Página de Detalhes --- */
+.galeria-imagens {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 400px;
+}
+
+.imagem-principal img {
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.miniaturas {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.miniatura {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.miniatura.active {
+    border-color: var(--primary-color);
+}
+/* --- Estilos da Barra de Busca --- */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#search-input {
+    padding: 8px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1em;
+    width: 250px;
+}
+
+#search-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 10;
+}
+/* --- Estilos da Barra de Busca --- */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#search-input {
+    padding: 8px 15px;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    border-radius: 20px;
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #fff;
+    font-size: 1em;
+    width: 250px;
+}
+
+#search-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 10;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    text-decoration: none;
+    color: var(--secondary-color);
+    border-bottom: 1px solid #eee;
+}
+
+.search-result-item:hover {
+    background-color: var(--background-color);
+}
+
+.search-result-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.no-results {
+    padding: 10px;
+    text-align: center;
+    color: #999;
 }
