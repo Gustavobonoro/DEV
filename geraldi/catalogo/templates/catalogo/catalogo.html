@@ -16,33 +16,30 @@
             {% load static %}
             <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
         </a>
-
-<nav class="main-nav">
-    <ul>
-        <li class="dropdown">
-            <a href="{% url 'catalogo' %}" class="dropdown-btn">Catálogo</a>
-            <ul class="dropdown-content">
-                <li><a href="{% url 'catalogo' %}" class="categoria-link" data-categoria="todos">Todos os Produtos</a></li>
-                {% for categoria in categorias %}
-                    <li><a href="#" class="categoria-link" data-categoria="{{ categoria.id }}">{{ categoria.nome }}</a></li>
-                {% endfor %}
+        <nav class="main-nav">
+            <ul>
+                <li class="dropdown">
+                    <a href="{% url 'catalogo' %}" class="dropdown-btn">Catálogo</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'catalogo' %}">Todos os Produtos</a></li>
+                        {% for categoria in categorias %}
+                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}">{{ categoria.nome }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="{% url 'contato' %}">Contato</a></li>
+                <li><a href="{% url 'sobre' %}">Sobre</a></li>
             </ul>
-        </li>
-        <li><a href="{% url 'contato' %}">Contato</a></li>
-        <li><a href="{% url 'sobre' %}">Sobre</a></li>
-    </ul>
-</nav>
-
-
+        </nav>
     </header>
 
-<section class="banner-promocional">
-    <div class="banner-carousel">
-        <img src="{% static 'img/banner1.png' %}" alt="Promoção 1" class="carousel-img active">
-        <img src="{% static 'img/banner2.png' %}" alt="Promoção 2" class="carousel-img">
-        <img src="{% static 'img/banner3.png' %}" alt="Promoção 3" class="carousel-img">
-    </div>
-</section>
+    <section class="banner-promocional">
+        <div class="banner-carousel">
+            <img src="{% static 'img/banner1.png' %}" alt="Promoção 1" class="carousel-img active">
+            <img src="{% static 'img/banner2.png' %}" alt="Promoção 2" class="carousel-img">
+            <img src="{% static 'img/banner3.png' %}" alt="Promoção 3" class="carousel-img">
+        </div>
+    </section>
 
     <section class="texto-produtos">
         <h2>Nossa Coleção</h2>
@@ -54,10 +51,10 @@
     </section>
     
     <main>
-        {% for categoria in categorias %}
-            <h2>{{ categoria.nome }}</h2>
+        {% if categoria_selecionada %}
+            <h2>{{ categoria_selecionada.nome }}</h2>
             <div class="catalogo-grid">
-                {% for produto in categoria.produto_set.all %}
+                {% for produto in produtos %}
                     <a href="{% url 'produto_detalhe' produto_id=produto.id %}" class="produto-link">
                         <div class="produto-item">
                             <h3>{{ produto.nome }}</h3>
@@ -66,7 +63,21 @@
                     </a>
                 {% endfor %}
             </div>
-        {% endfor %}
+        {% else %}
+            {% for categoria in categorias %}
+                <h2>{{ categoria.nome }}</h2>
+                <div class="catalogo-grid">
+                    {% for produto in categoria.produto_set.all %}
+                        <a href="{% url 'produto_detalhe' produto_id=produto.id %}" class="produto-link">
+                            <div class="produto-item">
+                                <h3>{{ produto.nome }}</h3>
+                                <img src="{{ produto.imagemproduto_set.first.imagem.url }}" alt="{{ produto.nome }}">
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
     </main>
 
     <footer>

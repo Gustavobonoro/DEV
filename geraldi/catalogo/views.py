@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Produto, Categoria, ImagemProduto  # Importe o novo modelo
+from .models import Produto, Categoria, ImagemProduto # Importe o modelo ImagemProduto
 
 def catalogo_view(request):
     # Pega todas as categorias do banco de dados
@@ -11,6 +11,18 @@ def catalogo_view(request):
     }
 
     # Renderiza o template HTML e passa os dados para ele
+    return render(request, 'catalogo/catalogo.html', contexto)
+
+def catalogo_filtrado_view(request, categoria_id):
+    categoria = get_object_or_404(Categoria, pk=categoria_id)
+    produtos = Produto.objects.filter(categoria=categoria)
+    categorias = Categoria.objects.all()
+
+    contexto = {
+        'categoria_selecionada': categoria,
+        'produtos': produtos,
+        'categorias': categorias
+    }
     return render(request, 'catalogo/catalogo.html', contexto)
 
 def produto_detalhe_view(request, produto_id):
@@ -28,6 +40,7 @@ def produto_detalhe_view(request, produto_id):
     
     # Renderiza o novo template de detalhes do produto
     return render(request, 'catalogo/produto_detalhe.html', contexto)
+    
 def sobre_view(request):
     return render(request, 'catalogo/sobre.html')
 

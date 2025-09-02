@@ -11,24 +11,27 @@
 </head>
 <body class="body-container">
 
-    <a href="{% url 'catalogo' %}" class="btn-voltar">&leftarrow; Voltar ao Catálogo</a>
-
     <header class="main-header">
-    <a href="{% url 'catalogo' %}" class="btn-voltar">&leftarrow; Voltar ao Catálogo</a>
-    
-    <a href="{% url 'catalogo' %}" class="logo-link">
-        {% load static %}
-        <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
-    </a>
-
-    <nav class="main-nav">
-        <ul>
-            <li><a href="{% url 'catalogo' %}">Catálogo</a></li>
-            <li><a href="{% url 'contato' %}">Contato</a></li>
-            <li><a href="{% url 'sobre' %}">Sobre</a></li>
-        </ul>
-    </nav>
-</header>
+        <a href="{% url 'catalogo' %}" class="logo-link">
+            {% load static %}
+            <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li class="dropdown">
+                    <a href="{% url 'catalogo' %}" class="dropdown-btn">Catálogo</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'catalogo' %}">Todos os Produtos</a></li>
+                        {% for categoria in categorias %}
+                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}">{{ categoria.nome }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="{% url 'contato' %}">Contato</a></li>
+                <li><a href="{% url 'sobre' %}">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
     
     <main>
         <div class="detalhe-container">
@@ -36,11 +39,11 @@
 
             <div class="produto-detalhe">
                 <div class="carousel-container">
-<div class="carousel-images">
-    {% for imagem in imagens %}
-        <img src="{{ imagem.imagem.url }}" alt="{{ produto.nome }}" class="carousel-image {% if forloop.first %}active{% endif %}">
-    {% endfor %}
-</div>
+                    <div class="carousel-images">
+                        {% for imagem in imagens %}
+                            <img src="{{ imagem.imagem.url }}" alt="{{ produto.nome }}" class="carousel-image {% if forloop.first %}active{% endif %}">
+                        {% endfor %}
+                    </div>
                     <button class="carousel-button prev">&leftarrow;</button>
                     <button class="carousel-button next">&rightarrow;</button>
                 </div>
