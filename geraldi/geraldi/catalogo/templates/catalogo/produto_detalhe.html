@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Geraldi Semijoias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="body-container">
+
+    <header class="main-header">
+        <a href="{% url 'catalogo' %}" class="logo-link">
+            {% load static %}
+            <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li class="dropdown">
+                    <a href="{% url 'catalogo' %}" class="dropdown-btn">Catálogo</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'catalogo' %}">Todos os Produtos</a></li>
+                        {% for categoria in categorias %}
+                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}">{{ categoria.nome }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="{% url 'contato' %}">Contato</a></li>
+                <li><a href="{% url 'sobre' %}">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="detalhe-container">
+            <h2 style="text-align: center; margin-top: 20px;">{{ produto.nome }}</h2>
+
+            <div class="produto-detalhe">
+                <div class="carousel-container">
+                    <div class="carousel-images">
+                        {% for imagem in imagens %}
+                            <img src="{{ imagem.imagem.url }}" alt="{{ produto.nome }}" class="carousel-image {% if forloop.first %}active{% endif %}">
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-button prev">&leftarrow;</button>
+                    <button class="carousel-button next">&rightarrow;</button>
+                    <div class="carousel-indicators">
+                        {% for imagem in imagens %}
+                            <span class="dot {% if forloop.first %}active{% endif %}"></span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="informacoes">
+                    <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco|floatformat:2 }}</p>
+                    <p><strong>Código:</strong> {{ produto.codigo }}</p>
+                    <a href="#" id="botao-whatsapp" class="btn-whatsapp">
+                        {% load static %}
+                        <img src="{% static 'img/whatsapp_logo.png' %}" alt="Logo WhatsApp">
+                        Fazer Pedido
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Geraldi Semijoias. Todos os direitos reservados.</p>
+    </footer>
+
+    <div id="overlay"></div>
+    <div id="imagem-expandida-container">
+        <img src="" alt="Imagem Ampliada" id="imagem-expandida">
+        <span id="fechar-imagem">&times;</span>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
