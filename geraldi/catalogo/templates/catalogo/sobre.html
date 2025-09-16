@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Geraldi Semijoias - Sobre</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+</head>
+<body class="body-container">
+    <header class="main-header">
+        <a href="{% url 'catalogo' %}" class="logo-link">
+            {% load static %}
+            <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{% url 'catalogo' %}">Catálogo</a></li>
+                <li><a href="{% url 'contato' %}">Contato</a></li>
+                <li><a href="{% url 'sobre' %}">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="detalhe-container">
+        <h2>Sobre Nós</h2>
+        <p>A Geraldi nasceu de um desejo simples, mas cheio de significado: transformar o ato de se enfeitar em algo leve, acessível e especial. Mais do que semijoias, criamos peças que carregam histórias, sentimentos e momentos únicos.</p>
+        <p>Sabemos como pode ser frustrante não poder usar aquilo que você ama por conta de alergias ou da baixa qualidade. Por isso, nossa missão é oferecer semijoias delicadas, minimalistas e confortáveis, feitas para acompanhar cada detalhe do seu dia sem abrir mão da beleza e da segurança.</p>
+        <p>Nosso valor está na autenticidade: acreditamos que cada mulher merece expressar quem é com confiança, sem excessos, sem medo. Trabalhamos com carinho em cada coleção para entregar peças versáteis, atemporais e que marcam presença pelo detalhe — não pelo exagero.</p>
+        <p>Mais do que adornos, nossas semijoias são um convite a resgatar a sua essência, celebrar a sua história e encontrar beleza na simplicidade.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Geraldi Semijoias. Todos os direitos reservados.</p>
+    </footer>
+
+    {% load static %}
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

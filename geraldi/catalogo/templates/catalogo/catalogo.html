@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Geraldi Semijoias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+</head>
+<body class="body-container">
+
+    <header class="main-header">
+        <a href="{% url 'catalogo' %}" class="logo-link">
+            {% load static %}
+            <img src="{% static 'img/logo.png' %}" alt="Geraldi Semijoias" class="logo">
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li class="dropdown">
+                    <a href="{% url 'catalogo' %}" class="dropdown-btn {% if not categoria_selecionada %}active-category{% endif %}">Catálogo</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'catalogo' %}">Todos os Produtos</a></li>
+                        {% for categoria in categorias %}
+                            <li><a href="{% url 'catalogo_filtrado' categoria_id=categoria.id %}" {% if categoria_selecionada.id == categoria.id %}class="active-category"{% endif %}>{{ categoria.nome }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="{% url 'contato' %}">Contato</a></li>
+                <li><a href="{% url 'sobre' %}">Sobre</a></li>
+            </ul>
+        </nav>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="🔍 Buscar produtos...">
+        <div id="search-results" class="search-results"></div>
+    </div>
+</header>
+
+  <section class="banner-promocional">
+    <div class="banner-carousel">
+        {% for banner in banners %}
+            <img src="{{ banner.imagem.url }}" alt="{{ banner.titulo }}" class="carousel-img {% if forloop.first %}active{% endif %}">
+        {% endfor %}
+
+        <button class="carousel-nav-btn prev">&leftarrow;</button>
+        <button class="carousel-nav-btn next">&rightarrow;</button>
+        
+        <div class="carousel-indicators">
+            {% for banner in banners %}
+                <span class="dot {% if forloop.first %}active{% endif %}"></span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+    <section class="texto-produtos">
+        <h2>Nossa Coleção</h2>
+        <p>
+            Trabalhamos com uma variedade de semijoias elegantes e modernas, incluindo anéis sofisticados,
+            colares delicados e brincos deslumbrantes. Cada peça é cuidadosamente selecionada para
+            adicionar um toque de brilho e elegância ao seu dia a dia.
+        </p>
+    </section>
+    
+<main>
+    {% if categoria_selecionada %}
+        <h2>{{ categoria_selecionada.nome }}</h2>
+        <div class="catalogo-grid">
+            {% for produto in produtos %}
+                <a href="{% url 'produto_detalhe' produto_id=produto.id %}" class="produto-link">
+                    <div class="produto-item">
+                        <h3>{{ produto.nome }}</h3>
+                        <img src="{{ produto.imagemproduto_set.first.imagem.url }}" alt="{{ produto.nome }}">
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        {% for categoria in categorias %}
+            {% if categoria.produto_set.exists %}
+                <h2>{{ categoria.nome }}</h2>
+                <div class="catalogo-grid">
+                    {% for produto in categoria.produto_set.all %}
+                        <a href="{% url 'produto_detalhe' produto_id=produto.id %}" class="produto-link">
+                            <div class="produto-item">
+                                <h3>{{ produto.nome }}</h3>
+                                <img src="{{ produto.imagemproduto_set.first.imagem.url }}" alt="{{ produto.nome }}">
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</main>
+
+    <footer>
+        <p>&copy; 2025 Geraldi Semijoias. Todos os direitos reservados.</p>
+    </footer>
+
+    <button id="btn-topo">^</button>
+
+    {% load static %}
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
