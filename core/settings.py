@@ -2,16 +2,19 @@
 
 from pathlib import Path
 import os
-import dj_database_url
+import dj_database_url  # Importe o dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Configurações de Segurança ---
+# Lendo a chave secreta e o modo DEBUG a partir das variáveis de ambiente do Render
 SECRET_KEY = os.getenv('SECRET_KEY')
+# Em produção, DEBUG deve ser False. O Render cuida disso.
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
+# Configuração para o Render encontrar seu site
 ALLOWED_HOSTS = []
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -26,14 +29,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalogo',
-    'cloudinary',
+    'cloudinary',          
     'cloudinary_storage',
 ]
 
 # --- Middlewares ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # ADICIONADO PARA ARQUIVOS ESTÁTICOS
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,6 +67,7 @@ TEMPLATES = [
 ]
 
 # --- Banco de Dados ---
+# CORRIGIDO: Configuração para o banco de dados PostgreSQL do Render
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
@@ -85,18 +89,20 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# --- Arquivos Estáticos ---
+# --- Arquivos Estáticos e de Mídia ---
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# --- Chave Primária Padrão ---
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# --- Configuração de Mídia com Cloudinary (PARTE ADICIONADA) ---
+# --- Configuração de Mídia com Cloudinary ---
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': ('dm63y144q'),
-    'API_KEY': ('621249699368897'),
-    'API_SECRET': ('nNV4Gix1arj7r5zpYWiosdSmPos'),
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
+# Define o Cloudinary como o local padrão para salvar arquivos de mídia
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# --- Chave Primária Padrão ---
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
