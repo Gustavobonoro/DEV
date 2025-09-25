@@ -1,3 +1,5 @@
+
+.env
 # Python
 __pycache__/
 *.pyc
@@ -8,7 +10,6 @@ __pycache__/
 venv/
 
 # Django
-*.sqlite3
 /media/
 
 # IDEs

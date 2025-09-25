@@ -2,19 +2,23 @@
 
 from pathlib import Path
 import os
-# IMPORTANTE: Adicione estas duas linhas no topo do arquivo
+import dj_database_url  # Importe o dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Configurações de Segurança ---
-# Lendo a chave secreta e o modo DEBUG do arquivo .env
+# Lendo a chave secreta e o modo DEBUG a partir das variáveis de ambiente do Render
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG') == 'True'
+# Em produção, DEBUG deve ser False. O Render cuida disso.
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
+# Configuração para o Render encontrar seu site
 ALLOWED_HOSTS = []
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # --- Aplicações ---
 INSTALLED_APPS = [
@@ -30,6 +34,7 @@ INSTALLED_APPS = [
 # --- Middlewares ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # ADICIONADO PARA ARQUIVOS ESTÁTICOS
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -39,10 +44,9 @@ MIDDLEWARE = [
 ]
 
 # --- URLs e Aplicação ---
-# CORRIGIDO: Deve apontar para 'core.urls'
 ROOT_URLCONF = 'core.urls'
 WSGI_APPLICATION = 'core.wsgi.application'
-ASGI_APPLICATION = 'core.asgi.application' # Adicione esta linha para consistência
+ASGI_APPLICATION = 'core.asgi.application'
 
 # --- Templates ---
 TEMPLATES = [
@@ -61,19 +65,12 @@ TEMPLATES = [
 ]
 
 # --- Banco de Dados ---
-# CORRIGIDO: Lendo as configurações do MySQL do arquivo .env
+# CORRIGIDO: Configuração para o banco de dados PostgreSQL do Render
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600
+    )
 }
 
 # --- Validação de Senhas ---
